@@ -63,6 +63,7 @@ void DictProducer::buildEnDict() {
     _files.clear();
     _dict.clear();
     getFiles(0);
+    map<string, int> tempDict;
     for (auto &&file: _files) {
         ifstream ifs(file, std::ios::ate);
         if (!ifs) {
@@ -81,16 +82,15 @@ void DictProducer::buildEnDict() {
 //        delete[] buff;
         istringstream iss(txt);
         string word;
-        map<string, int> tempDict;
         while (iss >> word) {
             string newWord = dealEnWord(word);
             if (!_stopWords.count(newWord) && newWord.size() > 1)//去掉停用词和单个字符
                 ++tempDict[newWord];
         }
-        for (auto &&elem: tempDict) {
-            _dict.emplace_back(elem);
-        }
         ifs.close();
+    }
+    for (auto &&elem: tempDict) {
+        _dict.emplace_back(elem);
     }
     cout << "DictProducer::buildEnDict() build dict success!" << "\n";
 }
@@ -99,6 +99,7 @@ void DictProducer::buildCnDict() {
     _files.clear();
     _dict.clear();
     getFiles(1);
+    map<string, int> tempDict;
     for (auto &&file: _files) {
         ifstream ifs(file, std::ios::ate);
         if (!ifs.is_open()) {
@@ -113,16 +114,16 @@ void DictProducer::buildCnDict() {
         //去掉换行符
         txt.erase(std::remove(txt.begin(), txt.end(), '\n'), txt.end());
 
-        vector<string> words = _cuttor->cut(txt);
-        map<string, int> tempDict;
+        vector<string> words = _cuttor->cutForSearch(txt);
+
         for (auto &&word: words) {
             if (!_stopWords.count(word) && getByteNum_UTF8(word[0]) > 1)//去掉停用词和单个字符
                 ++tempDict[word];
         }
-        for (auto &&elem: tempDict) {
-            _dict.emplace_back(elem);
-        }
         ifs.close();
+    }
+    for (auto &&elem: tempDict) {
+        _dict.emplace_back(elem);
     }
     cout << "DictProducer::buildCnDict() build dict success!" << "\n";
 }
@@ -156,12 +157,14 @@ size_t DictProducer::getByteNum_UTF8(const char byte) {
     }
     return byteNum == 0 ? 1 : byteNum;
 }
+
 //读取词典
 void DictProducer::readDict() {
+    _dict.clear();
     vector<string> dictDir = Configuration::getInstance()->getDictFiles();
     vector<string> dictFiles;
-    dictFiles.emplace_back(dictDir[0]+"/dictCn.dat");
-    dictFiles.emplace_back(dictDir[0]+"/dictEn.dat");
+    dictFiles.emplace_back(dictDir[0] + "/dictCn.dat");
+    dictFiles.emplace_back(dictDir[0] + "/dictEn.dat");
     for (auto &&file: dictFiles) {
         ifstream ifs(file, std::ios::ate);
         if (!ifs.is_open()) {
@@ -193,6 +196,7 @@ void DictProducer::storeDict(const string &filepath) {
         return;
     }
     ostringstream oss;
+    oss.str().reserve(1000000);
     for (auto &&elem: _dict) {
         oss << elem.first << " " << elem.second << "\n";
     }
@@ -208,6 +212,7 @@ void DictProducer::storeIndex(const string &filepath) {
         return;
     }
     ostringstream oss;
+    oss.str().reserve(2000000);
     for (auto &&elem: _index) {
         oss << elem.first << " ";
         for (auto &&idx: elem.second) {

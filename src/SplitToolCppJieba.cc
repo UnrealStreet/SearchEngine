@@ -17,3 +17,10 @@ vector<string> SplitToolCppJieBa::cut(string txt) {
 //    std::cout << limonp::Join(words.begin(),words.end(),"/") << std::endl;
     return std::move(words);
 }
+
+vector<string> SplitToolCppJieBa::cutForSearch(string txt) {
+    vector<string> words;
+    _jieba->CutForSearch(txt, words, true);
+//    std::cout << limonp::Join(words.begin(),words.end(),"/") << std::endl;
+    return std::move(words);
+}
