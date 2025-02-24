@@ -68,7 +68,7 @@ string KeyRecommender::getCandidateWord()  {
         message["query"].push_back(candidate._word);
     }
 //    std::cout << message.dump() << std::endl;
-    return message.dump();
+    return message.dump(4);
 }
 
 //计算最小编辑距离-包括处理中英文

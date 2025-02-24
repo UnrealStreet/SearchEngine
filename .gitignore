@@ -131,3 +131,4 @@ CTestTestfile.cmake
 .clion.source.upload.marker
 resource/
 data/
+.ycm_extra_conf.py

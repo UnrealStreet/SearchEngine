@@ -1,5 +1,4 @@
-#ifndef _SPLITTOOLCPPJIEBA_H
-#define _SPLITTOOLCPPJIEBA_H
+#pragma once
 
 #include "SplitTool.h"
 
@@ -14,9 +13,17 @@ public:
 
     vector<string> cutForSearch(string txt) override;
 
-    ~SplitToolCppJieBa();
+    SplitToolCppJieBa(const SplitToolCppJieBa &) = delete;
+
+    SplitToolCppJieBa &operator=(const SplitToolCppJieBa &) = delete;
+
+    ~SplitToolCppJieBa() override;
+
+    static SplitToolCppJieBa *getInstance();
+
 private:
+    SplitToolCppJieBa();
+
     static cppjieba::Jieba *_jieba;
 };
 
-#endif //_SPLITTOOLCPPJIEBA_H

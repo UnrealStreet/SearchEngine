@@ -18,8 +18,8 @@ int main() {
     clock_t start, finish;
     start = clock();
     //创建一个分词工具对象
-    SplitToolCppJieBa splitTool;
-    DictProducer dictProducer(&splitTool);
+    SplitToolCppJieBa *splitTool = SplitToolCppJieBa::getInstance();
+    DictProducer dictProducer(splitTool);
     //创建英文词典
     dictProducer.buildEnDict();
     dictProducer.storeDict("../data/dictEn.dat");

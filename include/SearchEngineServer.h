@@ -25,6 +25,7 @@ private:
     explicit SearchEngineServer(int cnt);
 
     ~SearchEngineServer();
+
 public:
     SearchEngineServer(const SearchEngineServer &) = delete;
 
@@ -39,10 +40,15 @@ public:
 
     void loadModels();
 
-    static SearchEngineServer * getInstance();
+    static SearchEngineServer *getInstance();
+
 private:
     void loadStaticResourcesModel();
+
+    void loadCandidateModel();
+
     void loadSearchModel();
+
 private:
     WFFacilities::WaitGroup _waitGroup;
     wfrest::HttpServer _httpServer;

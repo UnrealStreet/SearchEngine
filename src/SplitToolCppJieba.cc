@@ -7,6 +7,13 @@ cppjieba::Jieba *SplitToolCppJieBa::_jieba = new cppjieba::Jieba("../resource/di
                                                                "../resource/dict/idf.utf8",
                                                                "../resource/dict/stop_words.utf8");
 
+SplitToolCppJieBa::SplitToolCppJieBa() = default;
+
+SplitToolCppJieBa *SplitToolCppJieBa::getInstance() {
+    static SplitToolCppJieBa instance;
+    return &instance;
+}
+
 SplitToolCppJieBa::~SplitToolCppJieBa() {
     delete _jieba;
 }
